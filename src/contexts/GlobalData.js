@@ -437,8 +437,6 @@ const getGlobalTransactions = async () => {
  * Gets the current price  of ETH, 24 hour price, and % change between them
  */
 const getEthPrice = async () => {
-  const utcCurrentTime = dayjs()
-
   let ethPrice = 0
   let ethPriceOneDay = 0
   let priceChangeETH = 0
