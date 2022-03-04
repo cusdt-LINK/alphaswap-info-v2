@@ -5,7 +5,7 @@ import utc from 'dayjs/plugin/utc'
 import { useTimeframe } from './Application'
 import {
   getPercentChange,
-  getBlocksFromTimestamps
+  getBlocksFromTimestamps,
   get2DayPercentChange,
   getTimeframe,
 } from '../utils'
