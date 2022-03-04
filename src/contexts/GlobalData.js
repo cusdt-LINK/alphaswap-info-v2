@@ -5,8 +5,6 @@ import utc from 'dayjs/plugin/utc'
 import { useTimeframe } from './Application'
 import {
   getPercentChange,
-  getBlockFromTimestamp,
-  getBlocksFromTimestamps,
   get2DayPercentChange,
   getTimeframe,
 } from '../utils'
@@ -15,7 +13,6 @@ import {
   GLOBAL_TXNS,
   GLOBAL_CHART,
   ALL_PAIRS,
-  ETH_PRICE,
   ALL_TOKENS,
   TOP_LPS_PER_PAIRS,
 } from '../apollo/queries'
@@ -440,7 +437,6 @@ const getGlobalTransactions = async () => {
  */
 const getEthPrice = async () => {
   const utcCurrentTime = dayjs()
-  const utcOneDayBack = utcCurrentTime.subtract(1, 'day').startOf('minute').unix()
 
   let ethPrice = 0
   let ethPriceOneDay = 0
