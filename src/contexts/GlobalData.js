@@ -14,11 +14,13 @@ import {
   GLOBAL_DATA,
   GLOBAL_TXNS,
   GLOBAL_CHART,
-  ETH_PRICE,
   ALL_PAIRS,
+  ETH_PRICE,
   ALL_TOKENS,
   TOP_LPS_PER_PAIRS,
 } from '../apollo/queries'
+import axios from 'axios';
+import config from './config';
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import { useAllPairData } from './PairData'
 const UPDATE = 'UPDATE'
@@ -445,24 +447,17 @@ const getEthPrice = async () => {
   let priceChangeETH = 0
 
   try {
-    let oneDayBlock = await getBlockFromTimestamp(utcOneDayBack)
-    let result = await client.query({
-      query: ETH_PRICE(),
-      fetchPolicy: 'cache-first',
-    })
-    let resultOneDay = await client.query({
-      query: ETH_PRICE(oneDayBlock),
-      fetchPolicy: 'cache-first',
-    })
-    const currentPrice = result?.data?.bundles[0]?.ethPrice
-    const oneDayBackPrice = resultOneDay?.data?.bundles[0]?.ethPrice
+    let result = await axios.get(config.kccScanUrl);
+    let resultOneDay = await axios.get(config.kccScanUrl);
+    const currentPrice = parseFloat(result.data['kucoin-shares'].usd);
+    const priceChange = parseFloat(resultOneDay.data['kucoin-shares'].usd_24h_change);
+    const oneDayBackPrice = currentPrice + priceChange;
     priceChangeETH = getPercentChange(currentPrice, oneDayBackPrice)
     ethPrice = currentPrice
     ethPriceOneDay = oneDayBackPrice
   } catch (e) {
     console.log(e)
   }
-
   return [ethPrice, ethPriceOneDay, priceChangeETH]
 }
 
